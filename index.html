@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Music Player</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+  <br><br><br><br>
+  <nav class="navbar">
+    <div class="logo">King's Music</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="help.html">Help</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <h1>•၊၊||၊|။||||။၊|။• King's Music Player</h1>
+    <button id="theme-toggle">☀︎︎☼</button>
+  </header>
+
+  <main>
+    <div class="player-container">
+      <div id="drop-zone">
+        <p>⬇️ Drag & Drop MP3 Files Here or</p>
+        <input type="file" id="file-upload" id="upload-btn" multiple accept="audio/mpeg"></input>
+      </div>
+
+      <div class="controls">
+        <button id="prev" title="Previous">◁</button>
+        <button id="play" title="Play/Pause">▶︎</button>
+        <button id="next" title="Next">▷</button>
+        <button id="shuffle" title="Shuffle">⇄</button>
+        <button id="replay" title="Replay">↺</button>
+        <input type="range" id="volume" min="0" max="1" step="0.00001" value="1" title="Volume">
+      </div>
+
+      <div class="progress-container">
+        <input type="range" id="progress-bar" min="0" max="100" value="0" step="0.00001">
+      </div>
+
+      <div id="now-playing">🎵 No song playing</div>
+
+      <div class="playlist-controls">
+        <input type="text" id="search-bar" placeholder="Search playlist..." />
+        <button id="clear-playlist">Clear Playlist</button>
+      </div>
+
+      <ul id="playlist"></ul>
+
+      <audio id="audio" controls hidden></audio>
+      
+      <p style="text-align: center; font-size: 14px; color: #888;">
+        Your playlist will be saved for your next visit.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 King's Music Player. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
