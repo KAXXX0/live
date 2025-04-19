@@ -215,7 +215,7 @@ footer {
   padding: 10px 0;
   background: #1c1c1c;
   color: #888;
-  font-size: 16px; /* Increase footer text size */
+  font-size: 16px;
   border-top: 1px solid #333;
 }
 
@@ -258,7 +258,7 @@ h1 {
   text-align: center;
   color: #888;
   transition: background 0.3s ease;
-  font-size: 18px; /* Increase text size */
+  font-size: 18px; 
 }
 
 #drop-zone.hover {
@@ -275,10 +275,10 @@ h1 {
   background: #444;
   color: #e0e0e0;
   border: none;
-  padding: 15px 20px; /* Increase button padding */
+  padding: 15px 20px; 
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px; /* Increase button text size */
+  font-size: 16px; 
   transition: background 0.3s, transform 0.2s;
 }
 
@@ -291,14 +291,14 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 30px 0; /* Increase spacing */
+  margin: 30px 0; 
 }
 
 .controls button {
   background: #444;
   border: none;
   color: #fff;
-  font-size: 24px; /* Increase button size */
+  font-size: 24px;
   cursor: pointer;
   padding: 10px 20px;
   margin: 5px;
@@ -328,14 +328,14 @@ h1 {
 }
 
 #volume {
-  width: 150px; /* Increase volume slider width */
+  width: 150px; 
 }
 
 #now-playing {
   margin-top: 10px;
   font-weight: bold;
   color: #888;
-  font-size: 18px; /* Increase now-playing text size */
+  font-size: 18px; 
   text-align: center;
 }
 
@@ -351,7 +351,7 @@ li.missing {
   max-height: 200px;
   overflow-y: auto;
   border-top: 1px solid #333;
-  font-size: 18px; /* Increase playlist text size */
+  font-size: 18px; 
 }
 
 #playlist li {
@@ -361,13 +361,13 @@ li.missing {
   margin: 5px 0;
   background: #222;
   border-radius: 5px;
-  cursor: pointer; /* Add pointer cursor for clickable items */
-  transition: background 0.3s ease; /* Add smooth hover effect */
+  cursor: pointer; 
+  transition: background 0.3s ease; 
   color: #e0e0e0;
 }
 
 #playlist li:hover {
-  background: #333; /* Highlight on hover */
+  background: #333; 
 }
 
 #playlist li.active {
@@ -380,10 +380,10 @@ li.missing {
   background: #444;
   color: #e0e0e0;
   border: none;
-  padding: 10px 15px; /* Increase button padding */
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px; /* Increase button text size */
+  font-size: 16px; 
   transition: background 0.3s, transform 0.2s;
 }
 
@@ -425,7 +425,7 @@ li.missing {
 #progress-bar {
   width: 100%;
   appearance: none;
-  height: 8px; /* Increase progress bar height */
+  height: 8px; 
   background: #333;
   border-radius: 5px;
   outline: none;
