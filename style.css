@@ -1,6 +1,6 @@
 body {
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  background: linear-gradient(135deg, #111 0%, var(--accent2) 100%);
   background-size: 400% 400%;
   color: #e0e0e0;
   margin: 0;
@@ -8,9 +8,19 @@ body {
   overflow-x: hidden;
   transition: background 0.3s ease, color 0.3s ease;
   font-size: 18px; /* Increase base font size */
+  backdrop-filter: blur(2px) saturate(120%);
+  min-height: 100vh;
+}
+body.dynamic-gradient {
+  animation: gradientShift 16s ease-in-out infinite;
+  background: linear-gradient(135deg, #111 0%, var(--accent1) 100%);
 }
 nav {
   position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1100;
 }
 nav ul {
   list-style: none;
@@ -18,8 +28,9 @@ nav ul {
   margin: 0;
   display: flex;
   justify-content: space-around;
-  background: #1c1c1c;
-  border-bottom: 1px solid #333;
+  background: rgba(20,20,20,0.85);
+  border-bottom: 1px solid var(--accent2);
+  box-shadow: 0 2px 12px var(--accent2);
 }
 nav ul li {
   padding: 15px 20px; /* Increase padding for nav items */
@@ -29,54 +40,104 @@ nav ul li {
   position: fixed;
   top: 0;
   width: 100%;
-  background: #1c1c1c;
+  background: rgba(24, 24, 32, 0.85);
   color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(30,60,114,0.18), 0 1.5px 8px #0008;
   z-index: 1000;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.4s, box-shadow 0.4s, border-bottom 0.4s;
+  border-bottom: 2px solid var(--accent1);
+  backdrop-filter: blur(14px) saturate(140%);
+  overflow: visible;
+  animation: navFadeIn 1s cubic-bezier(.4,2,.6,1);
+}
+
+@keyframes navFadeIn {
+  from { opacity: 0; transform: translateY(-40px);}
+  to { opacity: 1; transform: translateY(0);}
 }
 
 .navbar.scrolled {
-  background: #121212;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  background: rgba(18,18,18,0.98);
+  box-shadow: 0 8px 32px var(--accent2), 0 2px 16px var(--accent1);
+  border-bottom: 2.5px solid var(--accent2);
 }
 
 .navbar .logo {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #1db954;
+  color: var(--accent1);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  text-shadow: 0 2px 8px var(--accent1);
+  transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
+  position: relative;
+  z-index: 2;
+  user-select: none;
+}
+.navbar .logo:hover {
+  color: #fff;
+  text-shadow: 0 2px 16px var(--accent1);
+  transform: scale(1.07) rotate(-2deg);
+  animation: logoPop 0.5s;
+}
+@keyframes logoPop {
+  0% { transform: scale(1) rotate(0deg);}
+  60% { transform: scale(1.12) rotate(-4deg);}
+  100% { transform: scale(1.07) rotate(-2deg);}
 }
 
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 32px;
   margin: 0;
   padding: 0;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.4s, transform 0.4s;
 }
 
 .nav-links li {
   position: relative;
+  overflow: visible;
+  animation: navBounceIn 0.7s cubic-bezier(.4,2,.6,1);
+}
+
+@keyframes navBounceIn {
+  0% { opacity: 0; transform: translateY(-30px) scale(0.8);}
+  60% { opacity: 1; transform: translateY(10px) scale(1.1);}
+  100% { opacity: 1; transform: translateY(0) scale(1);}
 }
 
 .nav-links a {
   text-decoration: none;
   color: #fff;
   font-size: 1rem;
-  padding: 5px 10px;
+  padding: 8px 18px;
   border-radius: 5px;
-  transition: color 0.3s ease, background 0.3s ease;
+  transition: color 0.3s, background 0.3s, transform 0.2s;
+  background: none;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  position: relative;
+  overflow: visible;
 }
 
-.nav-links a:hover {
-  background: #1db954;
-  color: #000;
+.nav-links a:hover, .nav-links a:focus {
+  color: var(--accent1);
+  background: none;
+  transform: translateY(-2px) scale(1.07);
+}
+
+.nav-links a:active {
+  color: var(--accent2);
+  transform: scale(0.97);
 }
 
 .nav-links a::after {
@@ -85,35 +146,71 @@ nav ul li {
   bottom: 0;
   left: 50%;
   width: 0;
-  height: 2px;
-  background: #1db954;
-  transition: width 0.3s ease, left 0.3s ease;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent1) 0%, var(--accent2) 100%);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(.4,2,.6,1), left 0.4s cubic-bezier(.4,2,.6,1);
+  z-index: 0;
 }
 
-.nav-links a:hover::after {
+.nav-links a:hover::after, .nav-links a:focus::after {
   width: 100%;
   left: 0;
+}
+
+@media (max-width: 900px) {
+  .nav-links {
+    gap: 12px;
+  }
 }
 
 @media (max-width: 768px) {
   .nav-links {
     flex-direction: column;
-    background: #1c1c1c;
+    background: rgba(28,28,28,0.98);
     position: absolute;
     top: 100%;
     right: 0;
-    width: 200px;
+    width: 220px;
     display: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px #1db95433;
+    border-radius: 0 0 12px 12px;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.4s, transform 0.4s;
   }
 
   .nav-links.active {
     display: flex;
+    opacity: 1;
+    transform: translateY(0);
+    animation: navSlideIn 0.5s;
+  }
+
+  @keyframes navSlideIn {
+    from { opacity: 0; transform: translateY(-30px);}
+    to { opacity: 1; transform: translateY(0);}
   }
 
   .navbar .logo {
     flex: 1;
   }
+}
+
+.nav-links li {
+  margin: 0 0.5em;
+  transition: transform 0.3s;
+}
+
+.nav-links li:hover {
+  transform: scale(1.08) rotate(-2deg);
+  animation: navBounceHover 0.4s;
+}
+
+@keyframes navBounceHover {
+  0% { transform: scale(1.08) rotate(-2deg);}
+  50% { transform: scale(1.15) rotate(2deg);}
+  100% { transform: scale(1.08) rotate(-2deg);}
 }
 
 .navbar {
@@ -130,11 +227,14 @@ nav ul li {
   text-decoration: none;
   padding: 10px 20px; /* Increase navbar link padding */
   border-radius: 5px;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+  background: none;
+  font-weight: 600;
 }
 .navbar a:hover {
-  background: #444;
-  color: #fff;
+  background: none;
+  color: #1db954;
+  transform: scale(1.07);
 }
 
 body.light-mode {
@@ -148,9 +248,11 @@ body.light-mode header .hero {
 }
 
 body.light-mode .player-container {
-  background: #fff;
+  background: rgba(255,255,255,0.92);
   color: #000;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 16px #1db95422;
+  border: 1.5px solid #1db95433;
+  backdrop-filter: blur(8px) saturate(120%);
 }
 
 body.dark-mode {
@@ -172,31 +274,37 @@ body.dark-mode .player-container {
 header {
   text-align: center;
   padding: 20px;
-  background: #1c1c1c;
+  background: rgba(28,28,28,0.92);
   color: #fff;
   font-size: 2rem;
   font-weight: bold;
-  border-bottom: 1px solid #333;
+  border-bottom: 2px solid var(--accent1);
+  box-shadow: 0 4px 24px var(--accent2);
 }
 
 header .hero {
   text-align: center;
   padding: 50px 20px;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
   color: #fff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 18px;
+  margin-bottom: 18px;
 }
 
 header .hero h1 {
   font-size: 4rem; /* Increase hero title size */
   margin: 0;
   animation: fadeIn 2s ease-in-out;
+  text-shadow: 0 4px 24px #2575fc55;
 }
 
 header .hero p {
   font-size: 1.5rem; /* Increase hero subtitle size */
   margin-top: 10px;
   animation: fadeIn 3s ease-in-out;
+  color: #e0e0e0;
+  text-shadow: 0 2px 8px #23252688;
 }
 
 @keyframes fadeIn {
@@ -213,10 +321,11 @@ header .hero p {
 footer {
   text-align: center;
   padding: 10px 0;
-  background: #1c1c1c;
-  color: #888;
+  background: rgba(28,28,28,0.92);
+  color: #1db954;
   font-size: 16px;
-  border-top: 1px solid #333;
+  border-top: 2px solid #1db954;
+  box-shadow: 0 -2px 12px #1db95422;
 }
 
 main {
@@ -227,11 +336,19 @@ main {
   max-width: 600px;
   margin: 30px auto;
   padding: 20px;
-  background: #1e1e1e;
+  background: rgba(20,20,20,0.92);
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 32px var(--accent2), 0 1.5px 8px #0008;
   text-align: center;
   animation: slideIn 1.5s ease-in-out;
+  backdrop-filter: blur(12px) saturate(120%);
+  border: 1.5px solid var(--accent2);
+  transition: box-shadow 0.4s, background 0.4s;
+}
+
+.player-container:hover {
+  box-shadow: 0 12px 48px var(--accent1), 0 2px 16px #000a;
+  background: rgba(20,20,30,0.98);
 }
 
 @keyframes slideIn {
@@ -251,20 +368,23 @@ h1 {
 }
 
 #drop-zone {
-  border: 2px dashed #444;
+  border: 2px dashed var(--accent1);
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
   text-align: center;
-  color: #888;
+  color: var(--accent2);
   transition: background 0.3s ease;
-  font-size: 18px; 
+  font-size: 20px;
+  background: rgba(40,40,60,0.18);
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
 }
 
 #drop-zone.hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(41,121,255,0.12);
   border-color: #fff;
   color: #fff;
+  box-shadow: 0 2px 16px var(--accent1);
 }
 
 #drop-zone p {
@@ -272,18 +392,20 @@ h1 {
 }
 
 #drop-zone button {
-  background: #444;
-  color: #e0e0e0;
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent2) 100%);
+  color: #fff;
   border: none;
-  padding: 15px 20px; 
+  padding: 15px 20px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px; 
+  font-size: 16px;
+  font-weight: 600;
   transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 2px 8px var(--accent1);
 }
 
 #drop-zone button:hover {
-  background: #555;
+  background: linear-gradient(90deg, var(--accent2) 60%, var(--accent1) 100%);
   transform: scale(1.05);
 }
 
@@ -291,28 +413,33 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 30px 0; 
+  margin: 30px 0;
+  gap: 10px;
 }
 
 .controls button {
-  background: #444;
+  background: linear-gradient(90deg, var(--accent2) 60%, var(--accent1) 100%);
   border: none;
   color: #fff;
-  font-size: 24px;
+  font-size: 26px;
+  font-weight: 600;
   cursor: pointer;
   padding: 10px 20px;
   margin: 5px;
   border-radius: 5px;
   transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 8px var(--accent2);
 }
 
 .controls button:hover {
-  background: #555;
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent2) 100%);
+  color: #fff;
   transform: scale(1.1);
+  box-shadow: 0 4px 16px var(--accent1);
 }
 
 #shuffle, #replay {
-  background: #444;
+  background: linear-gradient(90deg, var(--accent2) 60%, var(--accent1) 100%);
   color: #fff;
   border: none;
   cursor: pointer;
@@ -320,23 +447,45 @@ h1 {
   margin: 5px;
   border-radius: 5px;
   transition: background 0.3s ease, transform 0.2s ease;
+  font-weight: 600;
+  box-shadow: 0 2px 8px var(--accent2);
+}
+
+#shuffle.active, #replay.active {
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent2) 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px var(--accent1);
 }
 
 #shuffle:hover, #replay:hover {
-  background: #555;
+  background: linear-gradient(90deg, var(--accent2) 60%, var(--accent1) 100%);
   transform: scale(1.1);
 }
 
+#shuffle.active {
+  animation: shuffleShake 0.5s;
+}
+@keyframes shuffleShake {
+  0% { transform: rotate(0deg);}
+  20% { transform: rotate(-10deg);}
+  40% { transform: rotate(10deg);}
+  60% { transform: rotate(-8deg);}
+  80% { transform: rotate(8deg);}
+  100% { transform: rotate(0deg);}
+}
+
 #volume {
-  width: 150px; 
+  width: 150px;
+  accent-color: var(--accent1);
 }
 
 #now-playing {
   margin-top: 10px;
   font-weight: bold;
-  color: #888;
-  font-size: 18px; 
+  color: var(--accent1);
+  font-size: 20px;
   text-align: center;
+  text-shadow: 0 2px 8px var(--accent1);
 }
 
 li.missing {
@@ -351,7 +500,10 @@ li.missing {
   max-height: 200px;
   overflow-y: auto;
   border-top: 1px solid #333;
-  font-size: 18px; 
+  font-size: 18px;
+  background: rgba(40,40,60,0.10);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--accent2);
 }
 
 #playlist li {
@@ -359,36 +511,57 @@ li.missing {
   justify-content: space-between;
   padding: 10px;
   margin: 5px 0;
-  background: #222;
+  background: linear-gradient(90deg, var(--accent2) 60%, var(--accent1) 100%);
   border-radius: 5px;
-  cursor: pointer; 
-  transition: background 0.3s ease; 
+  cursor: pointer;
+  transition: background 0.3s ease;
   color: #e0e0e0;
+  font-weight: 500;
+  box-shadow: 0 2px 8px var(--accent2);
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  animation: playlistFadeIn 0.7s cubic-bezier(.4,2,.6,1);
+}
+
+@keyframes playlistFadeIn {
+  from { opacity: 0; transform: translateX(-30px);}
+  to { opacity: 1; transform: translateX(0);}
 }
 
 #playlist li:hover {
-  background: #333; 
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent2) 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px var(--accent1);
+  animation: playlistHover 0.3s;
+}
+
+@keyframes playlistHover {
+  0% { transform: scale(1) rotate(0);}
+  50% { transform: scale(1.05) rotate(-2deg);}
+  100% { transform: scale(1.03) rotate(0);}
 }
 
 #playlist li.active {
-  background: #6a11cb;
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent2) 100%);
   color: #fff;
   font-weight: bold;
+  box-shadow: 0 4px 24px var(--accent1);
 }
 
 #playlist li button {
-  background: #444;
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent3) 100%);
   color: #e0e0e0;
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px; 
+  font-size: 16px;
+  font-weight: 600;
   transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 2px 8px var(--accent1);
 }
 
 #playlist li button:hover {
-  background: #555;
+  background: linear-gradient(90deg, var(--accent3) 60%, var(--accent1) 100%);
   transform: scale(1.05);
 }
 
@@ -397,56 +570,79 @@ li.missing {
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.92);
   color: #fff;
   text-align: center;
   padding: 10px;
   display: none;
+  border-top: 2px solid var(--accent1);
+  box-shadow: 0 -2px 12px var(--accent1);
 }
 
 #cookie-banner button {
-  background: #6a11cb;
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent2) 100%);
   color: #fff;
   border: none;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  font-weight: 600;
 }
 
 #cookie-banner button:hover {
-  background: #4b0082;
+  background: linear-gradient(90deg, var(--accent2) 60%, var(--accent1) 100%);
 }
 
 .progress-container {
   margin: 20px 0;
+  color: var(--accent1);
   text-align: center;
+  background: rgba(20,20,30,0.10);
+  border-radius: 8px;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
 #progress-bar {
   width: 100%;
   appearance: none;
-  height: 8px; 
-  background: #333;
+  height: 8px;
+  background: linear-gradient(90deg, var(--accent1) 0%, var(--accent2) 100%);
   border-radius: 5px;
   outline: none;
   transition: background 0.3s;
+  box-shadow: 0 2px 8px var(--accent1);
+  margin: 0 8px;
 }
 
 #progress-bar::-webkit-slider-thumb {
   appearance: none;
   width: 10px;
   height: 10px;
-  background: #e0e0e0;
+  background: var(--accent1);
   border-radius: 50%;
   cursor: pointer;
+  border: 2px solid #fff;
 }
 
 #progress-bar::-moz-range-thumb {
   width: 10px;
   height: 10px;
-  background: #e0e0e0;
+  background: var(--accent1);
   border-radius: 50%;
   cursor: pointer;
+  border: 2px solid #fff;
+}
+
+#progress-timer {
+  min-width: 60px;
+  color: var(--accent2);
+  font-size: 1em;
+  font-family: monospace;
+  text-shadow: 0 1px 4px #000a;
 }
 
 /* Remove theme toggle styles */
@@ -499,10 +695,19 @@ body.dynamic-gradient {
   padding: 15px; /* Increase padding */
   border: 1px solid #444;
   border-radius: 5px;
-  background: #222;
-  color: #e0e0e0;
+  background: rgba(40,40,60,0.18);
+  color: var(--accent1);
   margin-right: 10px;
   font-size: 16px; /* Increase search bar text size */
+  font-weight: 500;
+  box-shadow: 0 2px 8px var(--accent1);
+  transition: background 0.3s, color 0.3s;
+}
+
+#search-bar:focus {
+  background: #fff;
+  color: #232526;
+  outline: 2px solid var(--accent1);
 }
 
 #search-bar::placeholder {
@@ -514,20 +719,640 @@ body.dynamic-gradient {
   justify-content: space-between;
   align-items: center;
   margin: 15px 0;
+  gap: 10px;
 }
 
 #clear-playlist {
-  background: #444;
-  color: #e0e0e0;
+  background: linear-gradient(90deg, var(--accent3) 60%, var(--accent1) 100%);
+  color: #fff;
   border: none;
   padding: 15px 20px; /* Increase button padding */
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px; /* Increase button text size */
+  font-weight: 600;
   transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 2px 8px var(--accent1);
 }
 
 #clear-playlist:hover {
-  background: #555;
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent3) 100%);
   transform: scale(1.05);
+}
+
+#play {
+  /* ...existing code... */
+  animation: playPulse 2s infinite alternate;
+}
+@keyframes playPulse {
+  0% { box-shadow: 0 0 0 0 var(--accent1);}
+  100% { box-shadow: 0 0 16px 8px var(--accent1);}
+}
+
+/* Download playlist button styles */
+#download-playlist-btn {
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent2) 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 18px;
+  margin-right: 10px;
+  box-shadow: 0 2px 8px var(--accent1);
+  transition: background 0.3s, transform 0.2s;
+  animation: fadeInUp 1s;
+}
+#download-playlist-btn:hover {
+  background: linear-gradient(90deg, var(--accent2) 60%, var(--accent1) 100%);
+  transform: scale(1.07);
+}
+
+/* Remove playlist upload button and modal styles */
+#upload-playlist-btn,
+#playlist-upload-modal {
+  display: none !important;
+}
+
+/* Playlist upload button and modal styles */
+#upload-playlist-btn {
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent2) 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 18px;
+  margin-right: 10px;
+  box-shadow: 0 2px 8px var(--accent1);
+  transition: background 0.3s, transform 0.2s;
+  animation: fadeInUp 1s;
+}
+#upload-playlist-btn:hover {
+  background: linear-gradient(90deg, var(--accent2) 60%, var(--accent1) 100%);
+  transform: scale(1.07);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+#playlist-upload-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(30,30,30,0.7);
+  align-items: center;
+  justify-content: center;
+  animation: modalFadeIn 0.4s;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0;}
+  to { opacity: 1;}
+}
+#playlist-upload-modal.active {
+  display: flex;
+}
+#playlist-upload-modal .modal-content {
+  background: #232526;
+  color: #fff;
+  border-radius: 12px;
+  padding: 32px 24px 24px 24px;
+  box-shadow: 0 8px 32px var(--accent1);
+  min-width: 320px;
+  max-width: 90vw;
+  animation: modalContentPop 0.5s;
+  position: relative;
+}
+@keyframes modalContentPop {
+  from { transform: scale(0.8);}
+  to { transform: scale(1);}
+}
+#playlist-upload-modal label {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  display: block;
+}
+#playlist-upload-modal input[type="file"] {
+  margin: 12px 0 18px 0;
+}
+#playlist-upload-modal button {
+  background: linear-gradient(90deg, var(--accent1) 60%, var(--accent2) 100%);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background 0.3s, transform 0.2s;
+}
+#playlist-upload-modal button:hover {
+  background: linear-gradient(90deg, var(--accent2) 60%, var(--accent1) 100%);
+  transform: scale(1.05);
+}
+#playlist-upload-modal .close-modal {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: none;
+  color: #fff;
+  font-size: 1.5em;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+#playlist-upload-modal .close-modal:hover {
+  color: var(--accent1);
+}
+
+/* Device-specific styles */
+body.mobile .player-container {
+  max-width: 98vw;
+  padding: 10px;
+  font-size: 16px;
+}
+body.mobile #playlist li {
+  font-size: 15px;
+  padding: 8px;
+}
+body.mobile .controls button,
+body.mobile #shuffle,
+body.mobile #replay {
+  font-size: 28px;
+  padding: 12px 18px;
+}
+body.mobile #volume {
+  width: 100px;
+}
+body.mobile #search-bar {
+  font-size: 15px;
+  padding: 10px;
+}
+body.mobile .navbar {
+  padding: 10px;
+  font-size: 16px;
+}
+body.mobile header .hero h1 {
+  font-size: 2.2rem;
+}
+body.mobile header .hero p {
+  font-size: 1.1rem;
+}
+body.mobile #download-playlist-btn,
+body.mobile #clear-playlist {
+  padding: 10px 12px;
+  font-size: 15px;
+}
+body.mobile .progress-container {
+  padding: 4px 0;
+}
+body.mobile #progress-bar {
+  height: 6px;
+}
+body.mobile .nav-links {
+  width: 90vw;
+  font-size: 16px;
+}
+body.mobile .logo {
+  font-size: 1.1rem;
+}
+body.mobile footer {
+  font-size: 14px;
+}
+
+/* Desktop-specific tweaks (optional, for clarity) */
+body.desktop .player-container {
+  max-width: 600px;
+}
+body.desktop #playlist li {
+  font-size: 18px;
+}
+body.desktop .controls button,
+body.desktop #shuffle,
+body.desktop #replay {
+  font-size: 26px;
+}
+body.desktop #volume {
+  width: 150px;
+}
+body.desktop #search-bar {
+  font-size: 16px;
+  padding: 15px;
+}
+body.desktop .navbar {
+  font-size: 18px;
+}
+body.desktop header .hero h1 {
+  font-size: 4rem;
+}
+body.desktop header .hero p {
+  font-size: 1.5rem;
+}
+body.desktop #download-playlist-btn,
+body.desktop #clear-playlist {
+  padding: 15px 20px;
+  font-size: 16px;
+}
+body.desktop .progress-container {
+  padding: 8px 0;
+}
+body.desktop #progress-bar {
+  height: 8px;
+}
+body.desktop .nav-links {
+  width: 220px;
+  font-size: 18px;
+}
+body.desktop .logo {
+  font-size: 1.5rem;
+}
+body.desktop footer {
+  font-size: 16px;
+}
+
+/* === New Color Scheme (Only 2 colors: green & blue) === */
+:root {
+  --accent1: #00e676; /* Green */
+  --accent2: #2979ff; /* Blue */
+}
+
+/* Remove unused accent3, accent4, accent5 throughout the file */
+
+/* === Mini Player (Fixed Bottom Bar) === */
+.mini-player {
+  position: sticky;
+  left: 0; right: 0; bottom: 0;
+  background: #111a;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  z-index: 2000;
+  padding: 8px 16px;
+  box-shadow: 0 -2px 24px var(--accent2);
+  transition: box-shadow 0.3s, background 0.3s, height 0.3s, transform 0.4s cubic-bezier(.4,2,.6,1);
+  cursor: pointer;
+  min-height: 60px;
+  max-height: 80px;
+  border-top: 2px solid var(--accent1);
+  gap: 16px;
+  transform: translateY(100%);
+  /* Initially hidden by sliding down */
+}
+.mini-player.visible {
+  transform: translateY(0);
+}
+.mini-player.collapsed {
+  height: 60px;
+}
+.mini-player .mini-cover {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #222;
+  border: 2px solid var(--accent1);
+}
+.mini-player .mini-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+}
+.mini-player .mini-info #mini-title {
+  font-weight: bold;
+  color: var(--accent1);
+  font-size: 1.1em;
+}
+.mini-player .mini-info #mini-artist {
+  font-size: 0.9em;
+  color: #aaa;
+}
+.mini-player .mini-controls button {
+  background: none;
+  border: none;
+  color: var(--accent1);
+  font-size: 1.5em;
+  margin: 0 4px;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+}
+.mini-player .mini-controls button:hover {
+  color: var(--accent2);
+  transform: scale(1.15);
+}
+
+/* === Fullscreen Player Overlay === */
+.fullscreen-player {
+  position: fixed;
+  z-index: 3000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: linear-gradient(135deg, #111 0%, var(--accent2) 100%);
+  align-items: center;
+  justify-content: center;
+  /* animation: modalFadeIn 0.4s; */
+  transition: transform 0.4s cubic-bezier(.4,2,.6,1), opacity 0.4s;
+  transform: translateY(100vh); /* Slide up from bottom of viewport */
+  opacity: 0;
+  pointer-events: none;
+  display: flex; /* Always flex for layout, hide with pointer-events/opacity */
+}
+.fullscreen-player.active {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.fullscreen-player.exit {
+  transform: translateY(100vh);
+  opacity: 0;
+  pointer-events: none;
+}
+.fullscreen-player .fullscreen-content {
+  background: #222;
+  color: #fff;
+  border-radius: 18px;
+  padding: 32px 24px 24px 24px;
+  box-shadow: 0 8px 32px var(--accent2);
+  min-width: 320px;
+  max-width: 95vw;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.fullscreen-player .fullscreen-cover {
+  width: 180px;
+  height: 180px;
+  border-radius: 16px;
+  object-fit: cover;
+  background: #111;
+  border: 3px solid var(--accent1);
+  margin-bottom: 18px;
+}
+.fullscreen-player .fullscreen-info {
+  text-align: center;
+  margin-bottom: 18px;
+}
+.fullscreen-player #fullscreen-title {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: var(--accent1);
+  display: block;
+}
+.fullscreen-player #fullscreen-artist {
+  font-size: 1em;
+  color: #aaa;
+  display: block;
+}
+.fullscreen-player .fullscreen-controls {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.fullscreen-player .fullscreen-controls button {
+  background: none;
+  border: none;
+  color: var(--accent1);
+  font-size: 2em;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+}
+.fullscreen-player .fullscreen-controls button:hover,
+.fullscreen-player .fullscreen-controls button.active {
+  color: var(--accent2);
+  transform: scale(1.15);
+}
+.fullscreen-player #fullscreen-progress,
+.fullscreen-player #fullscreen-volume {
+  width: 90%;
+  margin: 8px 0;
+  accent-color: var(--accent1);
+}
+.fullscreen-player #close-fullscreen {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: none;
+  color: var(--accent2);
+  font-size: 2em;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.fullscreen-player #close-fullscreen:hover {
+  color: var(--accent1);
+}
+
+/* Hide settings and upload modal styles */
+#upload-playlist-btn,
+#playlist-upload-modal {
+  display: none !important;
+}
+
+/* === Custom Range Slider Styles for Progress and Volume Bars === */
+
+/* Common styles for all range sliders */
+input[type="range"]#progress-bar,
+input[type="range"]#fullscreen-progress {
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(90deg, var(--accent1) 0%, var(--accent2) 100%);
+  border-radius: 6px;
+  outline: none;
+  box-shadow: 0 2px 8px var(--accent1);
+  transition: background 0.3s;
+  appearance: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Progress bar thumb */
+input[type="range"]#progress-bar::-webkit-slider-thumb,
+input[type="range"]#fullscreen-progress::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent2);
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px var(--accent2);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+input[type="range"]#progress-bar:active::-webkit-slider-thumb,
+input[type="range"]#fullscreen-progress:active::-webkit-slider-thumb {
+  background: var(--accent1);
+  transform: scale(1.1);
+}
+input[type="range"]#progress-bar::-moz-range-thumb,
+input[type="range"]#fullscreen-progress::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--accent2);
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px var(--accent2);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+input[type="range"]#progress-bar:active::-moz-range-thumb,
+input[type="range"]#fullscreen-progress:active::-moz-range-thumb {
+  background: var(--accent1);
+  transform: scale(1.1);
+}
+input[type="range"]#progress-bar::-ms-thumb,
+input[type="range"]#fullscreen-progress::-ms-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--accent2);
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px var(--accent2);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+/* Remove default outline on focus */
+input[type="range"]#progress-bar:focus,
+input[type="range"]#fullscreen-progress:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent1);
+}
+
+/* Hide the outline for Firefox */
+input[type="range"]#progress-bar::-moz-focus-outer,
+input[type="range"]#fullscreen-progress::-moz-focus-outer {
+  border: 0;
+}
+
+/* Volume bar styles */
+input[type="range"]#volume,
+input[type="range"]#fullscreen-volume {
+  width: 120px;
+  height: 6px;
+  background: #222;
+  border-radius: 3px;
+  outline: none;
+  box-shadow: 0 1px 4px var(--accent2);
+  transition: background 0.3s;
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--accent1);
+}
+
+/* Volume bar thumb */
+input[type="range"]#volume::-webkit-slider-thumb,
+input[type="range"]#fullscreen-volume::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--accent1);
+  border-radius: 50%;
+  border: 2px solid var(--accent2);
+  box-shadow: 0 1px 4px var(--accent2);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+input[type="range"]#volume:active::-webkit-slider-thumb,
+input[type="range"]#fullscreen-volume:active::-webkit-slider-thumb {
+  background: var(--accent2);
+  transform: scale(1.1);
+}
+input[type="range"]#volume::-moz-range-thumb,
+input[type="range"]#fullscreen-volume::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--accent1);
+  border-radius: 50%;
+  border: 2px solid var(--accent2);
+  box-shadow: 0 1px 4px var(--accent2);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+input[type="range"]#volume:active::-moz-range-thumb,
+input[type="range"]#fullscreen-volume:active::-moz-range-thumb {
+  background: var(--accent2);
+  transform: scale(1.1);
+}
+input[type="range"]#volume::-ms-thumb,
+input[type="range"]#fullscreen-volume::-ms-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--accent1);
+  border-radius: 50%;
+  border: 2px solid var(--accent2);
+  box-shadow: 0 1px 4px var (--accent2);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+/* Remove default outline on focus */
+input[type="range"]#volume:focus,
+input[type="range"]#fullscreen-volume:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent1);
+}
+
+/* Hide the outline for Firefox */
+input[type="range"]#volume::-moz-focus-outer,
+input[type="range"]#fullscreen-volume::-moz-focus-outer {
+  border: 0;
+}
+
+/* Track styles for all browsers */
+input[type="range"]#progress-bar::-webkit-slider-runnable-track,
+input[type="range"]#fullscreen-progress::-webkit-slider-runnable-track {
+  height: 10px;
+  background: linear-gradient(90deg, var(--accent1) 0%, var(--accent2) 100%);
+  border-radius: 6px;
+}
+input[type="range"]#volume::-webkit-slider-runnable-track,
+input[type="range"]#fullscreen-volume::-webkit-slider-runnable-track {
+  height: 6px;
+  background: linear-gradient(90deg, var(--accent1) 0%, var(--accent2) 100%);
+  border-radius: 3px;
+}
+input[type="range"]#progress-bar::-ms-fill-lower,
+input[type="range"]#fullscreen-progress::-ms-fill-lower {
+  background: var(--accent1);
+  border-radius: 6px;
+}
+input[type="range"]#progress-bar::-ms-fill-upper,
+input[type="range"]#fullscreen-progress::-ms-fill-upper {
+  background: var(--accent2);
+  border-radius: 6px;
+}
+input[type="range"]#volume::-ms-fill-lower,
+input[type="range"]#fullscreen-volume::-ms-fill-lower {
+  background: var(--accent1);
+  border-radius: 3px;
+}
+input[type="range"]#volume::-ms-fill-upper,
+input[type="range"]#fullscreen-volume::-ms-fill-upper {
+  background: var(--accent2);
+  border-radius: 3px;
+}
+
+/* Remove old progress/volume bar styles (if any) */
+
+/* Show playlist upload button, hide modal only */
+#upload-playlist-btn {
+  display: inline-block !important;
+}
+#upload-playlist-input {
+  display: none;
+}
+#playlist-upload-modal {
+  display: none !important;
 }

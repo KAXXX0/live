@@ -5,56 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Music Player</title>
   <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#0ff1ce">
 </head>
-<body class="dark-mode">
+<body class="dark-mode dynamic-gradient">
 
   <br class="dark-mode"><br class="dark-mode"><br class="dark-mode"><br class="dark-mode">
-  <nav class="navbar">
-    <div class="logo">King's Music</div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="logo" tabindex="0" aria-label="Toggle menu">King's Music
+      <button style="background-color: #0ff1ce; color: #111;" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">☀︎︎☼</button>
+    </div>
+    <ul class="nav-links" aria-label="Site links">
+      <li><a href="index.html" aria-current="page">Home</a></li>
     </ul>
   </nav>
 
   <header>
     <h1>•၊၊||၊|။||||။၊|။• King's Music Player</h1>
-    <button id="theme-toggle">☀︎︎☼</button>
   </header>
 
   <main>
-    <div class="player-container">
-      <div id="drop-zone">
+    <div class="player-container" aria-label="Music Player">
+      <button id="download-playlist-btn" title="Download Playlist">Download Playlist</button>
+      <button id="upload-playlist-btn" title="Upload Playlist">Upload Playlist</button>
+      <input type="file" id="upload-playlist-input" accept="application/json" style="display:none" />
+      <div id="drop-zone" tabindex="0" aria-label="Drop MP3 files here">
         <p>⇩ Drag & Drop MP3 Files Here</p>
-        <input type="file" id="file-upload" id="upload-btn" multiple accept="audio/mpeg"></input>
+        <input type="file" id="file-upload" multiple accept="audio/mpeg" aria-label="Upload MP3 files">
       </div>
 
-      <div class="controls">
-        <button id="prev" title="Previous">◁</button>
-        <button id="play" title="Play/Pause">▶︎</button>
-        <button id="next" title="Next">▷</button>
-        <button id="shuffle" title="Shuffle" hidden>⇄</button>
-        <button id="replay" title="Replay" hidden>↺</button>
-        <input type="range" id="volume" min="0" max="1" step="0.00001" value="1" title="Volume">
+      <div class="controls" aria-label="Playback controls">
+        <button id="prev" title="Previous" aria-label="Previous track">◁</button>
+        <button id="play" title="Play/Pause" aria-label="Play or pause">▶︎</button>
+        <button id="next" title="Next" aria-label="Next track">▷</button>
+        <button id="shuffle" title="Shuffle" aria-label="Shuffle playlist" hidden>⇄</button>
+        <button id="replay" title="Replay" aria-label="Replay current track" hidden>↺</button>
+        <input type="range" id="volume" min="0" max="1" step="0.00001" value="1" title="Volume" aria-label="Volume">
       </div>
 
-      <div class="progress-container">
-        <input type="range" id="progress-bar" min="0" max="100" value="0" step="0.00001">
+      <div class="progress-container" aria-label="Track progress">
+        <span id="progress-timer">0:00 / 0:00</span>
+        <input type="range" id="progress-bar" min="0" max="100" value="0" step="0.00001" aria-label="Progress bar">
       </div>
 
-      <div id="now-playing">🎵 No song playing</div>
+      <div id="now-playing" aria-live="polite">🎵 No song playing</div>
 
       <div class="playlist-controls">
-        <input type="text" id="search-bar" placeholder="Search playlist..." />
-        <button id="clear-playlist">Clear Playlist</button>
+        <input type="text" id="search-bar" placeholder="Search playlist..." aria-label="Search playlist" />
+        <button id="clear-playlist" aria-label="Clear playlist">Clear Playlist</button>
       </div>
 
-      <ul id="playlist"></ul>
+      <ul id="playlist" aria-label="Playlist"></ul>
 
-      <audio id="audio" controls hidden></audio>
+      <audio id="audio" controls hidden aria-label="Audio player"></audio>
       
-      <p style="text-align: center; font-size: 14px; color: #888;">
+      <div style="text-align: center; font-size: 14px; color: #888; margin-top: 10px;">
         Your playlist will be saved for your next visit.
-      </p>
+      </div>
+    </div>
+    <!-- Fixed bottom audio player bar -->
+    <div id="mini-player" class="mini-player collapsed" tabindex="0" aria-label="Expand player">
+      <img id="mini-cover" src="" alt="Cover Art" class="mini-cover" />
+      <div class="mini-info">
+        <span id="mini-title">No song playing</span>
+        <span id="mini-artist"></span>
+      </div>
+      <div class="mini-controls">
+        <button id="mini-prev" title="Previous">◁</button>
+        <button id="mini-play" title="Play/Pause">▶︎</button>
+        <button id="mini-next" title="Next">▷</button>
+      </div>
+    </div>
+    <!-- Expanded fullscreen player overlay -->
+    <div id="fullscreen-player" class="fullscreen-player" tabindex="0" aria-label="Collapse player">
+      <div class="fullscreen-content">
+        <img id="fullscreen-cover" src="" alt="Cover Art" class="fullscreen-cover" />
+        <div class="fullscreen-info">
+          <span id="fullscreen-title">No song playing</span>
+          <span id="fullscreen-artist"></span>
+        </div>
+        <div class="fullscreen-controls">
+          <button id="fullscreen-prev" title="Previous">◁</button>
+          <button id="fullscreen-play" title="Play/Pause">▶︎</button>
+          <button id="fullscreen-next" title="Next">▷</button>
+          <button id="fullscreen-shuffle" title="Shuffle">⇄</button>
+          <button id="fullscreen-replay" title="Replay">↺</button>
+        </div>
+        <input type="range" id="fullscreen-progress" min="0" max="100" value="0" step="0.00001" aria-label="Progress bar">
+        <span id="fullscreen-progress-timer">0:00 / 0:00</span>
+        <input type="range" id="fullscreen-volume" min="0" max="1" step="0.00001" value="1" aria-label="Volume">
+        <button id="close-fullscreen" title="Close">✕</button>
+      </div>
     </div>
   </main>
 
